@@ -1,32 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
-using nexus2.Models;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using nexus2.Data; // AppDbContext burada
+using nexus2.Models; // Modeller burada
 
 namespace nexus2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(AppDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            // Postlarý kullanýcýlarý, beðenileri ve yorumlarýyla birlikte çekiyoruz
+            var posts = await _context.Posts
+                .Include(p => p.User)
+                .Include(p => p.Likes)
+                .Include(p => p.Comments)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(posts);
         }
     }
 }

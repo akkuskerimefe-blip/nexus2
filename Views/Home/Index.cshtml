@@ -1,8 +1,45 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<nexus2.Models.Post>
+
+@{
+    ViewData["Title"] = "Nexus2 | Akış";
 }
 
-<div class="text-center">
-    <h1 class="display-4">erhancan</h1>
-    <p>Learn aıdkjoaıdjlasjfeaşlerhanwıofıosaj <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-7">
+        <h2 class="text-white mb-4"><i class="fa fa-bolt text-info"></i> Güncel Akış</h2>
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var post in Model)
+            {
+                <div class="card mb-4 shadow" style="background-color: #1e1e1e; border: 1px solid #333; border-radius: 15px;">
+                    <div class="card-header border-0 bg-transparent d-flex align-items-center pt-3">
+                        <img src="https://ui-avatars.com/api/?name=@(post.User?.Username ?? "U")&background=random" class="rounded-circle me-2" width="40">
+                        <span class="fw-bold text-white">@(post.User?.Username ?? "Anonim")</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-info">@post.Title</h5>
+                        <p class="card-text text-light">@post.Content</p>
+                        @if (!string.IsNullOrEmpty(post.AiSummary))
+                        {
+                            <div class="alert alert-dark p-2 small border-start border-info border-3">
+                                <i class="fa fa-robot me-1"></i> @post.AiSummary
+                            </div>
+                        }
+                    </div>
+                    <div class="card-footer bg-transparent border-top border-secondary py-2">
+                        <small class="text-muted">@post.CreatedAt.ToString("g")</small>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center p-5 rounded" style="background: #1a1a1a; border: 2px dashed #333;">
+                <i class="fa fa-feed fa-3x text-muted mb-3"></i>
+                <p class="text-muted">Henüz hiç paylaşım yok. İlk adımı sen at!</p>
+                <a asp-controller="Post" asp-action="Create" class="btn btn-outline-info btn-sm">Paylaşım Yap</a>
+            </div>
+        }
+    </div>
 </div>

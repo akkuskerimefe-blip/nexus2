@@ -1,0 +1,46 @@
+﻿<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h3 class="text-center fw-bold mb-4"><i class="fa fa-paper-plane text-info"></i> Yeni Paylaşım</h3>
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Başlık (Opsiyonel)</label>
+                        <input name="Title" class="form-control search-bar" placeholder="Harika bir başlık yaz...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">İçerik</label>
+                        <textarea name="Content" rows="4" class="form-control search-bar" placeholder="Neler oluyor?"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label d-block text-muted">Medya Yükle</label>
+                        <div class="upload-area border border-dashed rounded p-5 text-center bg-dark" style="cursor: pointer; border: 2px dashed #444;">
+                            <i class="fa fa-cloud-upload fa-3x text-info mb-2"></i>
+                            <p class="mb-0">Video veya Fotoğraf seç</p>
+                            <input type="file" name="MediaFile" class="d-none" id="fileInput">
+                        </div>
+                    </div>
+
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" id="aiSummary" name="GenerateAiSummary" checked>
+                        <label class="form-check-label" for="aiSummary">Yapay Zeka ile Özet Oluştur</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-nexus w-100 fw-bold">PAYLAŞ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('.upload-area').click(function () { $('#fileInput').click(); });
+        $('#fileInput').change(function () {
+            let fileName = $(this).val().split('\\').pop();
+            $('.upload-area p').text(fileName ? fileName : "Video veya Fotoğraf seç");
+        });
+    </script>
+}
